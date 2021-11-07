@@ -30,12 +30,13 @@ if __name__ == '__main__':
             testfile = os.path.join(subfolder, 'testsrc.csv')
             names = os.listdir(subfolder)
             if len(names) == 0:
-                # img=cv2.imread(imgloc)
-                # cv2.imwrite(r'.\resource\test_resource\test_Error\origin\{}'.format(filename),img)
-                # error_src=os.path.join(test_error_digits_srcfolder, filename)
-                # os.makedirs(error_src)
-                # extract_numbers_to_folder(imgloc, error_src)
-                # print(count, ':', filename)
+                #获取错误图片信息
+                img=cv2.imread(imgloc)
+                cv2.imwrite(r'.\resource\test_resource\test_Error\origin\{}'.format(filename),img)
+                error_src=os.path.join(test_error_digits_srcfolder, filename)
+                os.makedirs(error_src)
+                extract_numbers_to_folder(imgloc, error_src)
+                print(count, ':', filename)
                 print(r'error!')
             if len(names) > 0:
                 gencsv(subfolder, testfile)
@@ -58,14 +59,14 @@ if __name__ == '__main__':
                     pic_right += 1
                 else:
                     #获取错误图片信息
-                    # img=cv2.imread(imgloc)
-                    # cv2.imwrite(r'.\resource\test_resource\test_Error\origin\photo_{}.jpg'.format(count),img)
-                    # error_src=os.path.join(test_error_digits_srcfolder, filename)
-                    # os.makedirs(error_src)
-                    # extract_numbers_to_folder(imgloc, error_src)
-                    # print(count, ':', filename)
-                    # print(testlabel)
-                    # print(prediction)
+                    img=cv2.imread(imgloc)
+                    cv2.imwrite(r'.\resource\test_resource\test_Error\origin\photo_{}.jpg'.format(count),img)
+                    error_src=os.path.join(test_error_digits_srcfolder, filename)
+                    os.makedirs(error_src)
+                    extract_numbers_to_folder(imgloc, error_src)
+                    print(count, ':', filename)
+                    print(testlabel)
+                    print(prediction)
                     print(r'error!')
     
     print('图片识别准确率: {:.2f}%'.format(pic_right / pic_count*100))
