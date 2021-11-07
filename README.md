@@ -38,6 +38,8 @@
 1. 将训练用图放入resource/train_resource/train_Origin中
 2. 运行svm_train.py
 
+**注**：.gitkeep文件只为保留目录结构，若报错请自行删除。
+
 ## 正确率
 
 图片识别准确率：99%
