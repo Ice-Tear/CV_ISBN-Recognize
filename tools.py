@@ -425,6 +425,11 @@ def preProcess(image):
         返回值:
         - `binary`:处理完成的二值图
     '''
+    #获取背景颜色
+    orign=image.copy()
+    gray=cv2.cvtColor(orign, cv2.COLOR_BGR2GRAY)
+    binary=cv2.threshold(gray, 0, 255, cv2.THRESH_OTSU+cv2.THRESH_BINARY)[1]
+    backGroundColor=getBackground(binary)
     #旋转变换
     image=correctImage(image)
     #缩放变换
@@ -453,8 +458,11 @@ def preProcess(image):
     # # 局部直方图均衡化(去除光照影响)
     # clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
     # gray = clahe.apply(gray)
-    #二值化
-    binary=cv2.threshold(gray, 0, 255, cv2.THRESH_OTSU+cv2.THRESH_BINARY)[1]
+    #根据背景色进行二值化
+    if backGroundColor==0:
+        binary=cv2.threshold(gray, 0, 255, cv2.THRESH_OTSU+cv2.THRESH_BINARY_INV)[1]
+    else:
+        binary=cv2.threshold(gray, 0, 255, cv2.THRESH_OTSU+cv2.THRESH_BINARY)[1]
     #清除背景黑边
     binary=ClearBackGround(binary)
 
@@ -594,9 +602,31 @@ def test(srcImg):
         cv2.imshow('list',img)
         cv2.waitKey(0)
 
+def getBackground(binary):
+    '''
+    获取二值图背景色
+        参数:
+        - `binary`:二值图
+
+        返回值:
+        - `binary[i, j]`:背景色值
+    '''
+    max_area = -1
+    max_ind = -1
+    ret, lables, stats, centroid = cv2.connectedComponentsWithStats(binary)
+    for i in range(len(stats)):
+        if stats[i, 4] > max_area:
+            max_area = stats[i, 4]
+            max_ind = i
+    for i in range(lables.shape[0]):
+        for j in range(lables.shape[1]):
+            if lables[i, j] == max_ind:
+                return binary[i, j]
+
+
 # if __name__ == '__main__':
 
-#     srcImg=r'test\ISBN 978-7-208-04232-2.jpg'
-#     image=cv2.imread(srcImg)
-#     test(image)
-#     cv2.waitKey(0)
+    # srcImg=r'test\ISBN 978-7-208-04232-2.jpg'
+    # image=cv2.imread(srcImg)
+    # test(image)
+    # cv2.waitKey(0)
