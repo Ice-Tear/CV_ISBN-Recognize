@@ -5,6 +5,7 @@ import config
 from math import *
 from scipy.stats import mode
 from skimage import exposure,img_as_float,img_as_ubyte
+import numba as nb
 
 #图像校正
 class ImgCorrect():
@@ -155,7 +156,7 @@ def correctImage(img):
     #若图像不是真彩图
     else:
         return correct(img)
-
+@nb.jit()
 def h_Projection(binary):
     """
     获取水平投影
@@ -190,7 +191,7 @@ def h_Projection(binary):
     # cv2.imshow('h_Projection',h_Binary)
     # print(stats)
     return stats
-
+@nb.jit()
 def v_Projection(binary):
     """
     获取垂直投影
@@ -226,7 +227,7 @@ def v_Projection(binary):
     # cv2.imshow('v_Projection',v_Binary)
     # print(stats)
     return stats
-
+@nb.jit()
 def projectionBlur(stats,length=0,height=0):
     """
     将传入投影数组中的噪点去除
@@ -280,7 +281,7 @@ def ClearBackGround(binary):
     binary = cv2.floodFill(binary, mask=None, seedPoint=(width-1,height-1), newVal=(255, 255, 255))[1]
     binary = cv2.floodFill(binary, mask=None, seedPoint=(width-1, 0), newVal=(255, 255, 255))[1]
     return binary
-
+@nb.jit()
 def h_Split(binary):
     """
     根据水平投影进行水平方向的切割,获取最上面一块区域的水平切割图像
@@ -328,7 +329,7 @@ def h_Split(binary):
     #截取起始位置到终止位置的图像
     h_Split=binary[h_start:h_end, :].copy()
     return h_Split
-
+@nb.jit()
 def v_Split(binary):
     """
     根据垂直投影进行垂直方向的切割,获取所有垂直切割图像
@@ -373,7 +374,7 @@ def v_Split(binary):
             start_mark=False
             end_mark=False
     return v_Split
-
+@nb.jit()
 def ishyphen(binary):
     """
     基于最小外接矩形的图像校正(二值图)
@@ -400,7 +401,7 @@ def ishyphen(binary):
         return True
     else:
         return False
-
+@nb.jit()
 def getdigitnum(isbnname: str):
     """
     通过文件名获取图片数字的个数
