@@ -7,8 +7,9 @@ import joblib
 from config import train_model, test_srcfolder, test_dstfolder,test_error_digits_srcfolder,test_error_srcfolder
 from tools import extract_numbers_to_folder,gencsv
 from time import *
-
+import warnings
 if __name__ == '__main__':
+    warnings.filterwarnings("ignore")
     begin_time=time()
     svc = joblib.load(train_model)
     pic_right = 0

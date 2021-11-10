@@ -4,8 +4,9 @@ import joblib
 from config import train_file, train_srcfolder, train_dstfolder, train_model
 from tools import extract_numbers_all_to_folder,gencsv
 from time import *
-
+import warnings
 if __name__ == '__main__':
+    warnings.filterwarnings("ignore")
     begin_time=time()
     #提取该路径下的图片中所有数字，并输出到指定文件内
     extract_numbers_all_to_folder(train_srcfolder, train_dstfolder)

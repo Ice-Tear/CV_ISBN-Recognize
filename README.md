@@ -23,7 +23,7 @@
 ## 环境
 
 * **Language**：python 3.8
-* **Libraries**：opencv_python,numpy,scipy,matplotlib,pandas,scikit_learn,joblib,scikit_image
+* **Libraries**：opencv_python,numpy,scipy,matplotlib,pandas,scikit_learn,joblib,scikit_image,numba
 
 ## 使用
 
