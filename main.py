@@ -8,6 +8,8 @@ from config import train_model, test_srcfolder, test_dstfolder,test_error_digits
 from tools import extract_numbers_to_folder,gencsv
 from time import *
 import warnings
+from tools import getdigitnum
+
 if __name__ == '__main__':
     warnings.filterwarnings("ignore")
     begin_time=time()
@@ -23,7 +25,8 @@ if __name__ == '__main__':
         for filename in filenames:
             count += 1
             print(count, ':', filename)
-
+            #通过文件名获取数字个数
+            number_count=getdigitnum(filename)
             imgloc = os.path.join(dirpath, filename)
             subfolder = os.path.join(test_dstfolder, filename)
             os.makedirs(subfolder)
@@ -35,7 +38,11 @@ if __name__ == '__main__':
                 img=cv2.imread(imgloc)
                 cv2.imwrite(r'.\resource\test_resource\test_Error\origin\{}'.format(filename),img)
                 error_src=os.path.join(test_error_digits_srcfolder, filename)
-                os.makedirs(error_src)
+                if not os.path.exists(error_src):
+                    os.makedirs(error_src)
+                else:
+                    shutil.rmtree(error_src)
+                    os.makedirs(error_src)
                 extract_numbers_to_folder(imgloc, error_src)
                 print(count, ':', filename)
                 print(r'error!')
@@ -45,10 +52,8 @@ if __name__ == '__main__':
                 testdata = test.values[:, 1:]
                 testlabel = test.values[:, 0]
                 prediction = svc.predict(testdata)
-                #打印真值
-                print(testlabel)
                 #打印预测值
-                print(prediction)
+                print(r'预测值:',prediction)
                 local_char_right = 0
                 num = len(testlabel)
                 for i in range(num):
@@ -56,18 +61,21 @@ if __name__ == '__main__':
                         local_char_right += 1
                 char_right += local_char_right
                 char_count += num
-                if local_char_right == num:
+                if local_char_right == number_count:
                     pic_right += 1
                 else:
                     #获取错误图片信息
                     img=cv2.imread(imgloc)
                     cv2.imwrite(r'.\resource\test_resource\test_Error\origin\photo_{}.jpg'.format(count),img)
                     error_src=os.path.join(test_error_digits_srcfolder, filename)
-                    os.makedirs(error_src)
+                    if not os.path.exists(error_src):
+                        os.makedirs(error_src)
+                    else:
+                        shutil.rmtree(error_src)
+                        os.makedirs(error_src)
                     extract_numbers_to_folder(imgloc, error_src)
                     print(count, ':', filename)
-                    print(testlabel)
-                    print(prediction)
+                    print(r'预测值:',prediction)
                     print(r'error!')
     
     print('图片识别准确率: {:.2f}%'.format(pic_right / pic_count*100))

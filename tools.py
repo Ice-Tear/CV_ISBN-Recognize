@@ -494,8 +494,7 @@ def extract_numbers_to_folder(imgSrc,dstfolder):
     #将切割后的图像组输出至指定文件中
     idx = 1
     filename = os.path.split(imgSrc)[1]
-    oriname = os.path.splitext(filename)[0].split('_')[0]
-    digitnum = getdigitnum(oriname)
+    digitnum = getdigitnum(filename)
     #从数组下标为4开始导出数字，因为ISBN分别占了前4个
     for img in v_images[4:]:
         if not ishyphen(img) and idx <= digitnum:
@@ -534,8 +533,7 @@ def extract_numbers_all_to_folder(srcfolder: str, dstfolder:str):
             v_images=v_Split(h_image)
             #将切割后的图像组输出至指定文件中
             idx = 1
-            oriname = os.path.splitext(filename)[0].split('_')[0]
-            digitnum = getdigitnum(oriname)
+            digitnum = getdigitnum(filename)
             for img in v_images[4:]:
                 if not ishyphen(img) and idx <= digitnum:
                     img = cv2.resize(img, config.size)
